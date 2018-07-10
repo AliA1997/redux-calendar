@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import './Days.css';
+import { connect } from 'react-redux';
+import { updateDay } from './ducks/reducer';
 
-export default class Days extends Component {
+class Days extends Component {
   render() {
     const numOfDays = 30;
     const days = Array.from(new Array(numOfDays), (val, index) => index + 1);
@@ -12,7 +14,8 @@ export default class Days extends Component {
           return (
             <div
               key={x}
-              className={x === 19 ? 'day selected' : 'day'}
+              className={x === this.props.dayOfTheMonth ? 'day selected' : 'day'}
+              onClick={() => this.props.updateDay(x)}
             >{x}</div>
           )
         })}
@@ -20,3 +23,15 @@ export default class Days extends Component {
     );
   }
 }
+
+const mapStateToProps = storeState => {
+  return {
+    dayOfTheMonth: storeState.day,
+  }
+}
+
+const mapDispatchToProps = {
+  updateDay,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Days)
